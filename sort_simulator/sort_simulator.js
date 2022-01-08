@@ -14,7 +14,7 @@ class SortSimulator {
     }
 
     updateSpeed(val){
-        this.waitTime = 120 - val;
+        this.waitTime = 100 - val;
     }
 
     changeArraySize(size){

@@ -1,0 +1,25 @@
+nav{
+    background-color: rgb(26, 58, 58);
+    color: white;
+    padding: 20px 0;
+}
+
+nav h1{
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.tile{
+    height: 20px;
+    border-right: 1px solid rgb(202, 202, 202);
+    border-bottom: 1px solid rgb(202, 202, 202);
+}
+.tile:hover{
+    background-color: rgb(133, 187, 187)
+}
+.board{
+    display: grid;
+    grid-template-columns: repeat(50, 1fr);
+    border: 10px solid rgb(26, 58, 58);
+    /* border-radius: 15px; */
+}

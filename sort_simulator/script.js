@@ -35,7 +35,3 @@ sortBtn.onclick = async ()=>{
     sortBtn.disabled = false;
     sizeSlider.disabled = false;
 }
-
-stopBtn.onclick = function (){
-    simulator = new SortSimulator();
-}
