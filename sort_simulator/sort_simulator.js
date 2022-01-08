@@ -7,7 +7,7 @@ class SortSimulator {
 
     constructor() {
         this.#board = document.getElementById('board');
-        this.waitTime = 0;
+        this.waitTime = 100;
     }
     #randomNumber(max) {
         return Math.floor(Math.random() * 2000) % max;
@@ -242,7 +242,7 @@ class SortSimulator {
     }
     async mergeSort() {
         let n = this.#nums.length;
-        this.#_mergeSort(0, n - 1);
+        await this.#_mergeSort(0, n - 1);
     }
 }
 
