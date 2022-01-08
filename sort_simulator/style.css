@@ -1,0 +1,40 @@
+
+body{
+    padding: 0;
+    margin: 0;
+}
+
+nav{
+    background-color: rgb(26, 58, 58);
+    color: white;
+    padding: 20px 0;
+}
+
+nav h1{
+    text-transform: uppercase;
+}
+
+.val-sim{
+    width: 6px;
+    margin-right: 1px;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    padding: 2px 0px;
+    /* transition: linear 1s; */
+}
+.primary{
+    background-color: teal;
+}
+.swap{
+    background-color: red;
+}
+.check{
+    background-color: yellow;
+}
+.pivot{
+    background-color: rgb(0, 0, 0);
+}
+.hue{
+    opacity: 0.4;
+}
+

@@ -7,13 +7,24 @@ class SortSimulator {
 
     constructor() {
         this.#board = document.getElementById('board');
-        this.waitTime = 30;
+        this.waitTime = 0;
     }
     #randomNumber(max) {
         return Math.floor(Math.random() * 2000) % max;
     }
-    generateRandomArray() {
-        let n = 100;
+
+    updateSpeed(val){
+        this.waitTime = 120 - val;
+    }
+
+    changeArraySize(size){
+        this.generateRandomArray(0);
+        this.generateRandomArray(size);
+    }
+
+    generateRandomArray(size) {
+        this.#board.innerHTML = '';
+        let n = size;
         this.#nums = new Array(n);
         this.#simCols = new Array(n);
         for (let i = 0; i < n; i++) {
@@ -235,8 +246,5 @@ class SortSimulator {
     }
 }
 
-var sortSimulator = new SortSimulator();
-// sortSimulator.generateArray([140, 130, 120, 110, 100, 90, 80, 70, 60, 50, 40, 30, 20, 10]);
-sortSimulator.generateRandomArray();
-sortSimulator.mergeSort();
 
+export {SortSimulator};
