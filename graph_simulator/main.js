@@ -4,6 +4,12 @@ import { Tile } from "./tile.js";
 const radios = document.querySelectorAll('input[name=nodeType]');
 const COLS = 80;
 const ROWS = 30;
+const DIRECTIONS = [
+    [0, 1],
+    [0, -1],
+    [1, 0],
+    [-1, 0]
+];
 var boardDiv = document.getElementById('board');
 var board;
 var nodeType = 'start';
@@ -16,7 +22,6 @@ function addRadiosEvent() {
     for (let radio of radios) {
         radio.onchange = function () {
             nodeType = radio.value;
-            console.log(nodeType);
         }
     }
 }
@@ -41,10 +46,10 @@ function onMouseDown() {
     }
     mark(this.id, nodeType);
 }
-function tileOf(idString){
+function tileOf(idString) {
     let id = parseInt(idString);
-    let row = Math.floor(id/COLS);
-    let col = id%COLS;
+    let row = Math.floor(id / COLS);
+    let col = id % COLS;
     return board[row][col];
 }
 function mark(id, type) {
@@ -60,7 +65,7 @@ function mark(id, type) {
 
 function unMark(id) {
     let tile = tileOf(id);
-    tile.setType(type);
+    tile.setType('tile');
 }
 function onMouseUp() {
     mouseDown = false;
@@ -109,3 +114,75 @@ function start() {
 }
 
 start();
+
+
+
+function rowNumber(idString) {
+    let id = parseInt(idString);
+    return Math.floor(id / COLS);
+}
+
+function colNumber(idString) {
+    let id = parseInt(idString);
+    return id % COLS;
+}
+
+function moveId(id, direction) {
+    let r = rowNumber(id);
+    let c = colNumber(id);
+    r += direction[0];
+    c += direction[1];
+    if(!exist(r,c))
+        return undefined;
+    let newId = r * COLS + c;
+    return newId;
+}
+
+function exist(r, c) {
+    return (r >= 0 && r < ROWS && c >= 0 && c < COLS);
+}
+var pervNode = {};
+function bfs() {
+    let queue = [startNodeId];
+    pervNode[startNodeId] = -1;
+    let index = 0;
+    while (queue.length) {
+        let currentId = queue[index++];
+        let tile = tileOf(currentId);
+        tile.visit();
+        if (currentId == targetId) {
+            tile.setType('target');
+            return;
+        }
+        for (let direction of DIRECTIONS) {
+            let childId = moveId(currentId, direction);
+            if(childId == undefined)
+                continue;
+            let child = tileOf(childId);
+            if (child.available()){
+                child.visit(true);
+                queue.push(childId);
+                pervNode[childId] = currentId;
+            }
+        }
+    }
+}
+
+function showPath(){
+    let path = [];
+    let current = targetId;
+    while(current>0){
+        path.push(current);
+        current = pervNode[current];
+    }
+    for(let i = path.length-1; i>=0;i--){
+        let tile = tileOf(path[i]);
+        tile.setType('path');
+    }
+}
+
+var goBtn = document.getElementById('goBtn');
+goBtn.onclick = function (){
+    bfs();
+    showPath();
+};

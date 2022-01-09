@@ -16,15 +16,16 @@ nav h1{
 }
 
 .tile{
-    border-right: 1px solid var(--lightGray);
-    border-bottom: 1px solid var(--lightGray);
+    border: 1px solid var(--lightGray);
+    /* border-bottom: 1px solid var(--lightGray); */
     font-size: 10px;
     text-align: center;
     color: rgb(155, 154, 154);
     user-select: none;
+    border-radius: 20%;
 }
 .start{
-    background-color: var(--primary);
+    background-color: red!important;
     color: var(--primary);
 }
 .block{
@@ -34,6 +35,13 @@ nav h1{
 .target{
     background-color: rgb(40, 93, 255);
     color: rgb(40, 93, 255);
+}
+.visited{
+    background-color: yellow;
+    transition: color linear 500ms;
+}
+.path{
+    background-color: rgb(40, 93, 255);
 }
 .tile:hover{
     border-color: var(--bg);
