@@ -22,7 +22,7 @@ nav h1{
     text-align: center;
     color: rgb(155, 154, 154);
     user-select: none;
-    border-radius: 20%;
+    border-radius: 25%;
 }
 .start{
     background-color: red!important;
@@ -37,11 +37,12 @@ nav h1{
     color: rgb(40, 93, 255);
 }
 .visited{
-    background-color: yellow;
-    transition: color linear 500ms;
+    background-color: rgb(255, 227, 70);
+    transition: background-color linear 500ms;
 }
 .path{
-    background-color: rgb(40, 93, 255);
+    background-color: purple;
+    transition: background-color linear 500ms;
 }
 .tile:hover{
     border-color: var(--bg);

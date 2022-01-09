@@ -115,7 +115,13 @@ function start() {
 
 start();
 
-
+function wait(time) {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve();
+        }, time);
+    })
+}
 
 function rowNumber(idString) {
     let id = parseInt(idString);
@@ -132,7 +138,7 @@ function moveId(id, direction) {
     let c = colNumber(id);
     r += direction[0];
     c += direction[1];
-    if(!exist(r,c))
+    if (!exist(r, c))
         return undefined;
     let newId = r * COLS + c;
     return newId;
@@ -142,7 +148,7 @@ function exist(r, c) {
     return (r >= 0 && r < ROWS && c >= 0 && c < COLS);
 }
 var pervNode = {};
-function bfs() {
+async function bfs() {
     let queue = [startNodeId];
     pervNode[startNodeId] = -1;
     let index = 0;
@@ -154,12 +160,13 @@ function bfs() {
             tile.setType('target');
             return;
         }
+        await wait(10);
         for (let direction of DIRECTIONS) {
             let childId = moveId(currentId, direction);
-            if(childId == undefined)
+            if (childId == undefined)
                 continue;
             let child = tileOf(childId);
-            if (child.available()){
+            if (child.available()) {
                 child.visit(true);
                 queue.push(childId);
                 pervNode[childId] = currentId;
@@ -168,21 +175,22 @@ function bfs() {
     }
 }
 
-function showPath(){
+async function showPath() {
     let path = [];
     let current = targetId;
-    while(current>0){
+    while (current > 0) {
         path.push(current);
         current = pervNode[current];
     }
-    for(let i = path.length-1; i>=0;i--){
+    for (let i = path.length - 1; i >= 0; i--) {
         let tile = tileOf(path[i]);
         tile.setType('path');
+        await wait(100);
     }
 }
 
 var goBtn = document.getElementById('goBtn');
-goBtn.onclick = function (){
-    bfs();
-    showPath();
+goBtn.onclick = async function () {
+    await bfs();
+    await showPath();
 };
