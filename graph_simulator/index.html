@@ -24,15 +24,18 @@
                     </select>
                 </div>
                 <div>
-                    <input type="radio" name="nodeType" id="startRadio">
-                    <label for="blockRadio" class="me-3">Start</label>
-                    <input type="radio" name="nodeType" id="targetRadio">
-                    <label for="blockRadio" class="me-3">Target</label>
-                    <input type="radio" name="nodeType" id="blockRadio">
-                    <label for="blockRadio">Block</label>
+                    <input type="radio" name="nodeType" id="startRadio" value="start" checked>
+                    <label for="startRadio" class="me-3">Start</label>
+                    <input type="radio" name="nodeType" id="targetRadio" value="target">
+                    <label for="targetRadio" class="me-3">Target</label>
+                    <input type="radio" name="nodeType" id="blockRadio" value="block">
+                    <label for="blockRadio" class="me-3">Block</label>
+                    <input type="radio" name="nodeType" id="tileRadio" value="tile">
+                    <label for="tileRadio">Delete</label>
                 </div>
                 <div class="me-3">
                     <button type="button" id="sortBtn" class="btn btn-warning px-3 py-0 ms-5 fw-bold">GO</button>
+                    <button type="button" id="clearBtn" class="btn btn-warning px-3 py-0 ms-1 fw-bold">Clear</button>
                 </div>
             </div>
         </div>
@@ -41,6 +44,6 @@
         <div class="board mt-5" id="board">
         </div>
     </div>
-    <script src="main.js"></script>
+    <script type="module" src="main.js"></script>
 </body>
 </html>

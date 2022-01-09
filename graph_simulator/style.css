@@ -1,5 +1,11 @@
+:root{
+    --primary: rgb(255, 187, 0);
+    --bg: rgb(25,58,58);
+    --lightGray: rgb(230, 230, 230);
+}
+
 nav{
-    background-color: rgb(26, 58, 58);
+    background-color: var(--bg);
     color: white;
     padding: 20px 0;
 }
@@ -10,16 +16,34 @@ nav h1{
 }
 
 .tile{
-    height: 20px;
-    border-right: 1px solid rgb(202, 202, 202);
-    border-bottom: 1px solid rgb(202, 202, 202);
+    border-right: 1px solid var(--lightGray);
+    border-bottom: 1px solid var(--lightGray);
+    font-size: 10px;
+    text-align: center;
+    color: rgb(155, 154, 154);
+    user-select: none;
+}
+.start{
+    background-color: var(--primary);
+    color: var(--primary);
+}
+.block{
+    background-color: var(--bg);
+    color: var(--bg);
+}
+.target{
+    background-color: rgb(40, 93, 255);
+    color: rgb(40, 93, 255);
 }
 .tile:hover{
-    background-color: rgb(133, 187, 187)
+    border-color: var(--bg);
 }
 .board{
+    height: 500px;
+    min-width: 1300px;
+    max-width: 1300px;
+    margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(50, 1fr);
-    border: 10px solid rgb(26, 58, 58);
-    /* border-radius: 15px; */
+    grid-template-columns: repeat(80, 1fr);
+    border: 10px solid var(--bg);
 }
