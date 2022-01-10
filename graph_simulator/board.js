@@ -21,14 +21,14 @@ function onMouseDown() {
     }
     else if (nodeType == 'start') {
         if (board.startId) {
-            board.unMark(board.startId);
+            board.unMark(board.startId, 'start');
         }
         board.startId = this.id;
         board.mark(board.startId, 'start');
     }
     else if (nodeType == 'target') {
         if (board.targetId) {
-            board.unMark(board.targetId);
+            board.unMark(board.targetId, 'target');
         }
         board.targetId = this.id;
         board.mark(board.targetId, 'target');
@@ -66,9 +66,13 @@ class Board {
     }
     mark(id, type) {
         if (this.startId == id && type != 'start') {
+            let tile = this.tileOf(this.startId);
+            tile.setType('tile');
             this.startId = undefined;
         }
         else if (this.targetId == id && type != 'target') {
+            let tile = this.tileOf(this.targetId);
+            tile.setType('tile');
             this.targetId = undefined;
         }
         let tile = this.tileOf(id);
@@ -76,7 +80,6 @@ class Board {
     }
 
     tileOf(idString) {
-        console.log(idString);
         let id = parseInt(idString);
         let row = Math.floor(id / this.cols);
         let col = id % this.cols;
@@ -93,9 +96,25 @@ class Board {
             }
         }
     }
+
+    #switchValueVisibility(show){
+        for(let i = 0;i<this.rows;i++){
+            for(let j = 0;j<this.cols; j++){
+                this.board[i][j].showValue(show);
+                
+            }
+        }
+    }
+
+    showValues(){
+        this.#switchValueVisibility(true);
+    }
+    hideValues(){
+        this.#switchValueVisibility(false);
+    }
     newTile(id) {
         let tile = document.createElement('div');
-        tile.className = 'tile';
+        tile.className = 'tile hide-value';
         tile.onmousedown = onMouseDown;
         tile.onmouseup = onMouseUp;
         tile.onmouseover = onMouseOver;
@@ -110,7 +129,7 @@ class Board {
             boardDiv.removeChild(boardDiv.firstChild);
         }
     }
-    unMark(id) {
+    unMark(id, type) {
         let tile = this.tileOf(id);
         tile.setType('tile');
     }

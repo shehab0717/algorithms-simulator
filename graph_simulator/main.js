@@ -1,4 +1,5 @@
 import { Board } from "./board.js";
+import { PriorityQueue } from "./priority_queue.js";
 
 
 const DIRECTIONS = [
@@ -15,6 +16,12 @@ var algorithm = 'BFS';
 
 algorithmSelector.onchange = function (){
     algorithm = this.value;
+    if(algorithm=='Dijkstra'){
+        board.showValues();
+    } 
+    else {
+        board.hideValues();
+    }
     console.log(algorithm);
 }
 goBtn.onclick = async function () {
@@ -100,3 +107,7 @@ async function showPath() {
 }
 
 
+
+function Dijkstra(){
+
+}
