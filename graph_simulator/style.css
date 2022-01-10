@@ -16,13 +16,13 @@ nav h1{
 }
 
 .tile{
-    border: 1px solid var(--lightGray);
-    /* border-bottom: 1px solid var(--lightGray); */
+    border-right: 1px solid var(--lightGray);
+    border-bottom: 1px solid var(--lightGray);
     font-size: 10px;
     text-align: center;
     color: rgb(155, 154, 154);
     user-select: none;
-    border-radius: 25%;
+    border-radius: 20%;
 }
 .start{
     background-color: red!important;
@@ -37,11 +37,11 @@ nav h1{
     color: rgb(40, 93, 255);
 }
 .visited{
-    background-color: rgb(255, 227, 70);
+    background-color: lightgray;
     transition: background-color linear 500ms;
 }
 .path{
-    background-color: purple;
+    background-color: rgb(255, 0, 255);
     transition: background-color linear 500ms;
 }
 .tile:hover{
