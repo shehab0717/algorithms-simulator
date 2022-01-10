@@ -1,119 +1,26 @@
-import { Tile } from "./tile.js";
+import { Board } from "./board.js";
 
 
-const radios = document.querySelectorAll('input[name=nodeType]');
-const COLS = 80;
-const ROWS = 30;
 const DIRECTIONS = [
     [0, 1],
     [0, -1],
     [1, 0],
     [-1, 0]
 ];
-var boardDiv = document.getElementById('board');
-var board;
-var nodeType = 'start';
-var mouseDown = false;
-var clearBtn = document.getElementById('clearBtn');
-var startNodeId;
-var targetId;
+var pervNode = {};
+var board = Board.getInstance();
+var goBtn = document.getElementById('goBtn');
+var algorithmSelector = document.getElementById('algorithmSelector');
+var algorithm = 'BFS';
 
-function addRadiosEvent() {
-    for (let radio of radios) {
-        radio.onchange = function () {
-            nodeType = radio.value;
-        }
-    }
+algorithmSelector.onchange = function (){
+    algorithm = this.value;
+    console.log(algorithm);
 }
-
-function onMouseDown() {
-    if (nodeType == 'block' || nodeType == 'tile') {
-        mouseDown = true;
-    }
-    else if (nodeType == 'start') {
-        if (startNodeId) {
-            unMark(startNodeId);
-        }
-        startNodeId = this.id;
-        mark(startNodeId, 'start');
-    }
-    else if (nodeType == 'target') {
-        if (targetId) {
-            unMark(targetId);
-        }
-        targetId = this.id;
-        mark(targetId, 'target');
-    }
-    mark(this.id, nodeType);
-}
-function tileOf(idString) {
-    let id = parseInt(idString);
-    let row = Math.floor(id / COLS);
-    let col = id % COLS;
-    return board[row][col];
-}
-function mark(id, type) {
-    if (startNodeId == id && type != 'start') {
-        startNodeId = undefined;
-    }
-    else if (targetId == id && type != 'target') {
-        targetId = undefined;
-    }
-    let tile = tileOf(id);
-    tile.setType(type);
-}
-
-function unMark(id) {
-    let tile = tileOf(id);
-    tile.setType('tile');
-}
-function onMouseUp() {
-    mouseDown = false;
-}
-
-function onMouseOver() {
-    if (mouseDown) {
-        mark(this.id, nodeType);
-    }
-}
-function newTile(id) {
-    let tile = document.createElement('div');
-    tile.className = 'tile';
-    tile.onmousedown = onMouseDown;
-    tile.onmouseup = onMouseUp;
-    tile.onmouseover = onMouseOver;
-    // tile.innerHTML = 50;
-    tile.id = id;
-    return tile;
-}
-
-function generateMap() {
-    clearMap();
-    board = new Array(ROWS);
-    for (let i = 0; i < ROWS; i++) {
-        board[i] = new Array(COLS);
-        for (let j = 0; j < COLS; j++) {
-            board[i][j] = new Tile(i * COLS + j, newTile(i * COLS + j));
-            boardDiv.appendChild(board[i][j].htmlElement);
-        }
-    }
-}
-
-function clearMap() {
-    startNodeId = undefined;
-    while (boardDiv.firstChild) {
-        boardDiv.removeChild(boardDiv.firstChild);
-    }
-}
-
-function start() {
-    startNodeId = undefined;
-    generateMap();
-    addRadiosEvent();
-    clearBtn.onclick = generateMap;
-}
-
-start();
+goBtn.onclick = async function () {
+    await bfs(board.startId, board.targetId);
+    await showPath();
+};
 
 function wait(time) {
     return new Promise(resolve => {
@@ -125,12 +32,12 @@ function wait(time) {
 
 function rowNumber(idString) {
     let id = parseInt(idString);
-    return Math.floor(id / COLS);
+    return Math.floor(id / board.cols);
 }
 
 function colNumber(idString) {
     let id = parseInt(idString);
-    return id % COLS;
+    return id % board.cols;
 }
 
 function moveId(id, direction) {
@@ -140,21 +47,24 @@ function moveId(id, direction) {
     c += direction[1];
     if (!exist(r, c))
         return undefined;
-    let newId = r * COLS + c;
+    let newId = r * board.cols + c;
     return newId;
 }
 
 function exist(r, c) {
-    return (r >= 0 && r < ROWS && c >= 0 && c < COLS);
+    return (r >= 0 && r < board.rows && c >= 0 && c < board.cols);
 }
-var pervNode = {};
-async function bfs() {
-    let queue = [startNodeId];
-    pervNode[startNodeId] = -1;
+
+async function bfs(startId, targetId) {
+    if(startId == undefined){
+        return;
+    }
+    let queue = [startId];
+    pervNode[startId] = -1;
     let index = 0;
     while (queue.length) {
         let currentId = queue[index++];
-        let tile = tileOf(currentId);
+        let tile = board.tileOf(currentId);
         tile.visit();
         if (currentId == targetId) {
             tile.setType('target');
@@ -165,7 +75,7 @@ async function bfs() {
             let childId = moveId(currentId, direction);
             if (childId == undefined)
                 continue;
-            let child = tileOf(childId);
+            let child = board.tileOf(childId);
             if (child.available()) {
                 child.visit(true);
                 queue.push(childId);
@@ -177,20 +87,16 @@ async function bfs() {
 
 async function showPath() {
     let path = [];
-    let current = targetId;
-    while (current > 0) {
+    let current = board.targetId;
+    while (current >= 0) {
         path.push(current);
         current = pervNode[current];
     }
     for (let i = path.length - 1; i >= 0; i--) {
-        let tile = tileOf(path[i]);
+        let tile = board.tileOf(path[i]);
         tile.setType('path');
         await wait(100);
     }
 }
 
-var goBtn = document.getElementById('goBtn');
-goBtn.onclick = async function () {
-    await bfs();
-    await showPath();
-};
+

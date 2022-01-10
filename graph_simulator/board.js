@@ -1,46 +1,95 @@
 import { Tile } from "./tile.js";
 
-var nodeType;
+var nodeType = 'start';
 var mouseDown = false;
-
 var boardDiv = document.getElementById('board');
+const radios = document.querySelectorAll('input[name=nodeType]');
+var clearBtn = document.getElementById('clearBtn');
+
+function addRadiosEvent() {
+    for (let radio of radios) {
+        radio.onchange = function () {
+            nodeType = radio.value;
+        }
+    }
+}
+
+function onMouseDown() {
+    let board = Board.getInstance();
+    if (nodeType == 'block' || nodeType == 'tile') {
+        mouseDown = true;
+    }
+    else if (nodeType == 'start') {
+        if (board.startId) {
+            board.unMark(board.startId);
+        }
+        board.startId = this.id;
+        board.mark(board.startId, 'start');
+    }
+    else if (nodeType == 'target') {
+        if (board.targetId) {
+            board.unMark(board.targetId);
+        }
+        board.targetId = this.id;
+        board.mark(board.targetId, 'target');
+    }
+    board.mark(this.id, nodeType);
+}
+
+function onMouseUp() {
+    mouseDown = false;
+}
+
+function onMouseOver() {
+    let board = Board.getInstance();
+    if (mouseDown) {
+        board.mark(this.id, nodeType);
+    }
+}
 
 class Board {
 
     board;
     rows;
     cols;
-    startNodeId;
+    startId;
     targetId;
-    constructor(rows, cols){
+    instance;
+
+    static getInstance() {
+        return this.instance = this.instance ? 
+                this.instance : new Board(30, 80);
+    }
+    constructor(rows, cols) {
         this.rows = rows;
         this.cols = cols;
     }
     mark(id, type) {
-        if (startNodeId == id && type != 'start') {
-            startNodeId = undefined;
+        if (this.startId == id && type != 'start') {
+            this.startId = undefined;
         }
-        else if (targetId == id && type != 'target') {
-            targetId = undefined;
+        else if (this.targetId == id && type != 'target') {
+            this.targetId = undefined;
         }
-        let tile = tileOf(id);
+        let tile = this.tileOf(id);
         tile.setType(type);
     }
 
     tileOf(idString) {
+        console.log(idString);
         let id = parseInt(idString);
         let row = Math.floor(id / this.cols);
         let col = id % this.cols;
-        return board[row][col];
+        return this.board[row][col];
     }
     generateMap() {
-        clearMap();
-        board = new Array(this.rows);
+        this.clearMap();
+        this.board = new Array(this.rows);
         for (let i = 0; i < this.rows; i++) {
-            board[i] = new Array(this.cols);
+            this.board[i] = new Array(this.cols);
             for (let j = 0; j < this.cols; j++) {
-                board[i][j] = new Tile(i * this.cols + j, newTile(i * this.cols + j));
-                boardDiv.appendChild(board[i][j].htmlElement);
+                this.board[i][j] = new Tile(i * this.cols + j, this.newTile(i * this.cols + j));
+                boardDiv.appendChild(this.board[i][j].htmlElement);
             }
         }
     }
@@ -55,15 +104,25 @@ class Board {
         return tile;
     }
     clearMap() {
-        startNodeId = undefined;
+        this.startId = undefined;
+        this.targetId = undefined;
         while (boardDiv.firstChild) {
             boardDiv.removeChild(boardDiv.firstChild);
         }
     }
     unMark(id) {
-        let tile = tileOf(id);
+        let tile = this.tileOf(id);
         tile.setType('tile');
     }
 }
 
-export {Board};
+function init(){
+    Board.getInstance().generateMap();
+    clearBtn.onclick = ()=>{
+        Board.getInstance().generateMap();
+    }
+    addRadiosEvent();
+}
+
+init();
+export { Board };
