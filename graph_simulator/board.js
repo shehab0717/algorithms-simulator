@@ -1,4 +1,5 @@
 import { Tile } from "./tile.js";
+import { MAZE } from "./maze.js";
 
 var nodeType = 'start';
 var mouseDown = false;
@@ -57,8 +58,8 @@ class Board {
     instance;
 
     static getInstance() {
-        return this.instance = this.instance ? 
-                this.instance : new Board(30, 80);
+        return this.instance = this.instance ?
+            this.instance : new Board(30, 80);
     }
     constructor(rows, cols) {
         this.rows = rows;
@@ -86,7 +87,7 @@ class Board {
         return this.board[row][col];
     }
     generateMap() {
-        this.clearMap();
+        // this.clear(false);
         this.board = new Array(this.rows);
         for (let i = 0; i < this.rows; i++) {
             this.board[i] = new Array(this.cols);
@@ -95,21 +96,56 @@ class Board {
                 boardDiv.appendChild(this.board[i][j].htmlElement);
             }
         }
+        this.generateMaze();
     }
-
-    #switchValueVisibility(show){
-        for(let i = 0;i<this.rows;i++){
-            for(let j = 0;j<this.cols; j++){
+    generateMaze() {
+        // console.log(MAZE);
+        for (let r = 0; r < this.rows; r++) {
+            if (MAZE[r].length) {
+                for (let c = 0; c < this.cols; c++) {
+                    this.board[r][c].setType(MAZE[r][c]=='#'?'block':'tile');
+                }
+            }
+        }
+    }
+    logMaze() {
+        let maze = new Array(30);
+        for (let r = 0; r < this.rows; r++) {
+            let rowString = '';
+            for (let c = 0; c < this.cols; c++) {
+                rowString += this.board[r][c].type == 'block' ? '#' : ' ';
+            }
+            maze[r] = rowString;
+        }
+        console.log(maze);
+    }
+    clear(keepBlocks) {
+        this.startId = undefined;
+        this.targetId = undefined;
+        for (let i = 0; i < this.rows; i++) {
+            for (let j = 0; j < this.cols; j++) {
+                if (keepBlocks && this.board[i][j].type == 'block') {
+                    continue;
+                }
+                this.board[i][j].setType('tile');
+                this.board.visited = false;
+            }
+        }
+        this.logMaze();
+    }
+    #switchValueVisibility(show) {
+        for (let i = 0; i < this.rows; i++) {
+            for (let j = 0; j < this.cols; j++) {
                 this.board[i][j].showValue(show);
-                
+
             }
         }
     }
 
-    showValues(){
+    showValues() {
         this.#switchValueVisibility(true);
     }
-    hideValues(){
+    hideValues() {
         this.#switchValueVisibility(false);
     }
     newTile(id) {
@@ -122,23 +158,19 @@ class Board {
         tile.id = id;
         return tile;
     }
-    clearMap() {
-        this.startId = undefined;
-        this.targetId = undefined;
-        while (boardDiv.firstChild) {
-            boardDiv.removeChild(boardDiv.firstChild);
-        }
-    }
+
     unMark(id, type) {
         let tile = this.tileOf(id);
         tile.setType('tile');
     }
 }
 
-function init(){
+function init() {
     Board.getInstance().generateMap();
-    clearBtn.onclick = ()=>{
-        Board.getInstance().generateMap();
+    clearBtn.onclick = () => {
+        let keep = document.getElementById('keepBlocks').checked;
+        console.log(keep);
+        Board.getInstance().clear(keep)
     }
     addRadiosEvent();
 }

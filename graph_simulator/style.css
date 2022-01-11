@@ -37,7 +37,7 @@ nav h1{
     color: rgb(40, 93, 255);
 }
 .visited{
-    background-color: lightgray;
+    background-color: rgb(171, 171, 171);
     transition: background-color linear 500ms;
 }
 .path{

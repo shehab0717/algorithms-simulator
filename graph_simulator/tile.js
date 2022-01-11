@@ -1,11 +1,11 @@
 class Tile {
-    #type;
+    type;
     id;
     visited;
     htmlElement;
     value;
     constructor(id, htmlElement) {
-        this.#type = 'tile';
+        this.type = 'tile';
         this.visited = false;
         this.id = id;
         this.value = Math.floor(Math.random() * 100) % 50;
@@ -20,7 +20,7 @@ class Tile {
         if(type=='tile'){
             this.visited=false;
         }
-        this.#type = type;
+        this.type = type;
         this.htmlElement.className = `tile ${type}`;
     }
 
@@ -29,11 +29,11 @@ class Tile {
         this.visited = true;
     }
     available() {
-        return (this.#type != 'block' && !this.visited);
+        return (this.type != 'block' && !this.visited);
     }
 
     isTarget() {
-        return this.#type == 'target';
+        return this.type == 'target';
     }
 
 }

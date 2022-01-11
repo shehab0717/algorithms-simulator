@@ -25,8 +25,6 @@ class PriorityQueue{
     top(){
         return this.queue[0];
     }
-
-
 }
 
 export {PriorityQueue};
