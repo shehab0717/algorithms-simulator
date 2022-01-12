@@ -8,9 +8,8 @@ const radios = document.querySelectorAll('input[name=nodeType]');
 var clearBtn = document.getElementById('clearBtn');
 
 function addRadiosEvent() {
-    console.log(radios);
     for (let radio of radios) {
-        radio.change = function () {
+        radio.onchange = function () {
             nodeType = radio.value;
         }
     }
@@ -165,7 +164,6 @@ class Board {
     }
 }
 function hotKey(event){
-    console.log(event.key);
     if(event.key == 'b'){
         document.getElementById('blockRadio').checked = true;
         nodeType = 'blobck';
