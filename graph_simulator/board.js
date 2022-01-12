@@ -8,8 +8,9 @@ const radios = document.querySelectorAll('input[name=nodeType]');
 var clearBtn = document.getElementById('clearBtn');
 
 function addRadiosEvent() {
+    console.log(radios);
     for (let radio of radios) {
-        radio.onchange = function () {
+        radio.change = function () {
             nodeType = radio.value;
         }
     }
@@ -137,7 +138,6 @@ class Board {
         for (let i = 0; i < this.rows; i++) {
             for (let j = 0; j < this.cols; j++) {
                 this.board[i][j].showValue(show);
-
             }
         }
     }
@@ -164,8 +164,25 @@ class Board {
         tile.setType('tile');
     }
 }
-
+function hotKey(event){
+    console.log(event.key);
+    if(event.key == 'b'){
+        document.getElementById('blockRadio').checked = true;
+        nodeType = 'blobck';
+    } else if(event.key == 's'){
+        document.getElementById('startRadio').checked = true;
+        nodeType = 'start';
+    } else if(event.key == 't'){
+        document.getElementById('targetRadio').checked = true;
+        nodeType = 'target';
+    } else if(event.key == 'd'){
+        document.getElementById('tileRadio').checked = true;
+        nodeType = 'tile';
+    }
+}
 function init() {
+    let body = document.getElementById('body');
+    body.onkeydown = hotKey;
     Board.getInstance().generateMap();
     clearBtn.onclick = () => {
         let keep = document.getElementById('keepBlocks').checked;

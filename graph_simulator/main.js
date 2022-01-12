@@ -102,12 +102,14 @@ async function showPath() {
     for (let i = path.length - 1; i >= 0; i--) {
         let tile = board.tileOf(path[i]);
         tile.setType('path');
-        await wait(100);
+        await wait(50);
     }
 }
 
 
 
-function Dijkstra(){
-
+function Dijkstra(startID, targetID){
+    let q = new PriorityQueue();
+    q.push([startID, 0]);
+    
 }

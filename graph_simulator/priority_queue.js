@@ -4,14 +4,15 @@ class PriorityQueue{
     constructor(){
         this.queue=[];
     }
-    push(val){
+    //element => [priority, value]
+    push(element){
         let i = 0;
         for(i = 0; i<this.queue.length;i++){
-            if(this.queue[i]>val){
+            if(this.queue[i]>element[0]){
                 break;
             }
         }
-        this.queue.splice(i,0,val);
+        this.queue.splice(i,0,element);
     }
 
     isEmpty(){

@@ -41,7 +41,7 @@ nav h1{
     transition: background-color linear 500ms;
 }
 .path{
-    background-color: rgb(255, 0, 255);
+    background-color: yellow;
     transition: background-color linear 500ms;
 }
 .tile:hover{
