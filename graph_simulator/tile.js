@@ -8,7 +8,7 @@ class Tile {
         this.type = 'tile';
         this.visited = false;
         this.id = id;
-        this.value = Math.floor(Math.random() * 100) % 50;
+        this.value = Math.floor(Math.random() * 100) % 20;
         this.htmlElement = document.createElement('div');
         this.htmlElement = htmlElement;
     }

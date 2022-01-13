@@ -20,20 +20,6 @@ function onMouseDown() {
     if (nodeType == 'block' || nodeType == 'tile') {
         mouseDown = true;
     }
-    else if (nodeType == 'start') {
-        if (board.startId) {
-            board.unMark(board.startId, 'start');
-        }
-        board.startId = this.id;
-        board.mark(board.startId, 'start');
-    }
-    else if (nodeType == 'target') {
-        if (board.targetId) {
-            board.unMark(board.targetId, 'target');
-        }
-        board.targetId = this.id;
-        board.mark(board.targetId, 'target');
-    }
     board.mark(this.id, nodeType);
 }
 
@@ -55,8 +41,7 @@ class Board {
     cols;
     startId;
     targetId;
-    instance;
-
+    static instance;
     static getInstance() {
         return this.instance = this.instance ?
             this.instance : new Board(30, 80);
@@ -66,14 +51,24 @@ class Board {
         this.cols = cols;
     }
     mark(id, type) {
-        if (this.startId == id && type != 'start') {
-            let tile = this.tileOf(this.startId);
-            tile.setType('tile');
+        if (type == 'start') {
+            if (this.startId) {
+                let oldStart = this.tileOf(this.startId);
+                oldStart.setType('tile');
+            }
+            this.startId = id;
+        }
+        else if (type == 'target') {
+            if(this.targetId){
+                let oldTarget = this.tileOf(this.targetId);
+                oldTarget.setType('tile');
+            }   
+            this.targetId = id;
+        }
+        else if (this.startId == id) {
             this.startId = undefined;
         }
-        else if (this.targetId == id && type != 'target') {
-            let tile = this.tileOf(this.targetId);
-            tile.setType('tile');
+        else if (this.targetId == id) {
             this.targetId = undefined;
         }
         let tile = this.tileOf(id);
@@ -96,14 +91,14 @@ class Board {
                 boardDiv.appendChild(this.board[i][j].htmlElement);
             }
         }
-        this.generateMaze();
+        // this.generateMaze();
     }
     generateMaze() {
         // console.log(MAZE);
         for (let r = 0; r < this.rows; r++) {
             if (MAZE[r].length) {
                 for (let c = 0; c < this.cols; c++) {
-                    this.board[r][c].setType(MAZE[r][c]=='#'?'block':'tile');
+                    this.board[r][c].setType(MAZE[r][c] == '#' ? 'block' : 'tile');
                 }
             }
         }
@@ -163,17 +158,17 @@ class Board {
         tile.setType('tile');
     }
 }
-function hotKey(event){
-    if(event.key == 'b'){
+function hotKey(event) {
+    if (event.key == 'b') {
         document.getElementById('blockRadio').checked = true;
         nodeType = 'blobck';
-    } else if(event.key == 's'){
+    } else if (event.key == 's') {
         document.getElementById('startRadio').checked = true;
         nodeType = 'start';
-    } else if(event.key == 't'){
+    } else if (event.key == 't') {
         document.getElementById('targetRadio').checked = true;
         nodeType = 'target';
-    } else if(event.key == 'd'){
+    } else if (event.key == 'd') {
         document.getElementById('tileRadio').checked = true;
         nodeType = 'tile';
     }
