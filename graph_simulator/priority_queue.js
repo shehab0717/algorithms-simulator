@@ -8,13 +8,12 @@ class PriorityQueue{
     push(element){
         let i = 0;
         for(i = 0; i<this.queue.length;i++){
-            if(this.queue[i]>element[0]){
+            if(this.queue[i][0]>element[0]){
                 break;
             }
         }
         this.queue.splice(i,0,element);
     }
-
     isEmpty(){
         return this.queue.length==0;
     }

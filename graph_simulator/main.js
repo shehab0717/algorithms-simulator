@@ -14,19 +14,25 @@ var goBtn = document.getElementById('goBtn');
 var algorithmSelector = document.getElementById('algorithmSelector');
 var algorithm = 'BFS';
 
-algorithmSelector.onchange = function (){
+algorithmSelector.onchange = function () {
     algorithm = this.value;
-    if(algorithm=='Dijkstra'){
+    if (algorithm == 'Dijkstra') {
         board.showValues();
-    } 
+    }
     else {
         board.hideValues();
     }
-    console.log(algorithm);
 }
 goBtn.onclick = async function () {
-    await bfs(board.startId, board.targetId);
-    await showPath();
+    console.log(board.startId);
+    // if (algorithm == 'BFS') {
+    //     await bfs(board.startId, board.targetId);
+    // } else if(algorithm == 'Dijkstra'){
+    //     console.log('Dijkstra');
+    //     Dijkstra(board.startId, board.targetId);
+    // }
+    Dijkstra(board.startId, board.targetId);
+    showPath();
 };
 
 function wait(time) {
@@ -63,7 +69,7 @@ function exist(r, c) {
 }
 
 async function bfs(startId, targetId) {
-    if(startId == undefined){
+    if (startId == undefined) {
         return;
     }
     let queue = [startId];
@@ -74,7 +80,6 @@ async function bfs(startId, targetId) {
         let tile = board.tileOf(currentId);
         tile.visit();
         if (currentId == targetId) {
-            tile.setType('target');
             return;
         }
         await wait(10);
@@ -106,10 +111,31 @@ async function showPath() {
     }
 }
 
-
-
-function Dijkstra(startID, targetID){
+function Dijkstra(startId, targetId) {
+    pervNode = [];
+    if(startId == undefined)
+        return;
     let q = new PriorityQueue();
-    q.push([startID, 0]);
-    
+    q.push([0, startId]);
+    pervNode[startId, -1];
+    while (!q.isEmpty()) {
+        let current = q.dequeue();
+        let currentTile = board.tileOf(current[1]);
+        currentTile.visit();
+        if (current[1] == targetId) {
+            return;
+        }
+        for (let direction of DIRECTIONS) {
+            let childId = moveId(current[1], direction);
+            if (childId == undefined)
+                continue;
+            let childTile = board.tileOf(childId);
+            if(childTile.available()){
+                q.push([current[0] + childTile.value, childId]);
+                childTile.visit();
+                pervNode[childId] = current[1];
+            }
+        }
+    }
+
 }
