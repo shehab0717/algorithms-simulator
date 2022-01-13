@@ -34,11 +34,11 @@ nav h1{
 }
 .target{
     background-color: rgb(40, 93, 255);
-    color: rgb(40, 93, 255);
 }
 .visited{
     background-color: rgb(171, 171, 171);
     transition: background-color linear 500ms;
+    color: white;
 }
 .path{
     background-color: yellow;

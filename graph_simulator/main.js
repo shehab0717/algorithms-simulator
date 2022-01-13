@@ -25,14 +25,13 @@ algorithmSelector.onchange = function () {
 }
 goBtn.onclick = async function () {
     console.log(board.startId);
-    // if (algorithm == 'BFS') {
-    //     await bfs(board.startId, board.targetId);
-    // } else if(algorithm == 'Dijkstra'){
-    //     console.log('Dijkstra');
-    //     Dijkstra(board.startId, board.targetId);
-    // }
-    Dijkstra(board.startId, board.targetId);
-    showPath();
+    if (algorithm == 'BFS') {
+        await bfs(board.startId, board.targetId);
+    } else if(algorithm == 'Dijkstra'){
+        console.log('Dijkstra');
+        await Dijkstra(board.startId, board.targetId);
+    }
+    await showPath();
 };
 
 function wait(time) {
@@ -111,7 +110,7 @@ async function showPath() {
     }
 }
 
-function Dijkstra(startId, targetId) {
+async function Dijkstra(startId, targetId) {
     pervNode = [];
     if(startId == undefined)
         return;
@@ -122,6 +121,7 @@ function Dijkstra(startId, targetId) {
         let current = q.dequeue();
         let currentTile = board.tileOf(current[1]);
         currentTile.visit();
+        await wait(10);
         if (current[1] == targetId) {
             return;
         }
