@@ -6,6 +6,12 @@ var mouseDown = false;
 var boardDiv = document.getElementById('board');
 const radios = document.querySelectorAll('input[name=nodeType]');
 var clearBtn = document.getElementById('clearBtn');
+var showMazeBtn = document.getElementById('showMazeBtn');
+
+showMazeBtn.onclick = function(){
+    let board = Board.getInstance();
+    board.showMaze();
+}
 
 function addRadiosEvent() {
     for (let radio of radios) {
@@ -91,10 +97,8 @@ class Board {
                 boardDiv.appendChild(this.board[i][j].htmlElement);
             }
         }
-        // this.generateMaze();
     }
-    generateMaze() {
-        // console.log(MAZE);
+    showMaze() {
         for (let r = 0; r < this.rows; r++) {
             if (MAZE[r].length) {
                 for (let c = 0; c < this.cols; c++) {
@@ -148,7 +152,6 @@ class Board {
         tile.onmousedown = onMouseDown;
         tile.onmouseup = onMouseUp;
         tile.onmouseover = onMouseOver;
-        // tile.innerHTML = 50;
         tile.id = id;
         return tile;
     }
