@@ -130,7 +130,7 @@ class Board {
                 this.board.visited = false;
             }
         }
-        this.logMaze();
+        // this.logMaze();
     }
     #switchValueVisibility(show) {
         for (let i = 0; i < this.rows; i++) {
@@ -182,7 +182,6 @@ function init() {
     Board.getInstance().generateMap();
     clearBtn.onclick = () => {
         let keep = document.getElementById('keepBlocks').checked;
-        console.log(keep);
         Board.getInstance().clear(keep)
     }
     addRadiosEvent();

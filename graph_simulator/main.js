@@ -8,7 +8,7 @@ const DIRECTIONS = [
     [1, 0],
     [-1, 0]
 ];
-var pervNode = {};
+var pervNode = [];
 var board = Board.getInstance();
 var goBtn = document.getElementById('goBtn');
 var algorithmSelector = document.getElementById('algorithmSelector');
@@ -27,7 +27,7 @@ goBtn.onclick = async function () {
     console.log(board.startId);
     if (algorithm == 'BFS') {
         await bfs(board.startId, board.targetId);
-    } else if(algorithm == 'Dijkstra'){
+    } else if (algorithm == 'Dijkstra') {
         console.log('Dijkstra');
         await Dijkstra(board.startId, board.targetId);
     }
@@ -71,6 +71,8 @@ async function bfs(startId, targetId) {
     if (startId == undefined) {
         return;
     }
+    startId = parseInt(startId);
+    targetId = parseInt(targetId);
     let queue = [startId];
     pervNode[startId] = -1;
     let index = 0;
@@ -86,6 +88,7 @@ async function bfs(startId, targetId) {
             let childId = moveId(currentId, direction);
             if (childId == undefined)
                 continue;
+            childId = parseInt(childId);
             let child = board.tileOf(childId);
             if (child.available()) {
                 child.visit(true);
@@ -98,7 +101,7 @@ async function bfs(startId, targetId) {
 
 async function showPath() {
     let path = [];
-    let current = board.targetId;
+    let current = parseInt(board.targetId);
     while (current >= 0) {
         path.push(current);
         current = pervNode[current];
@@ -109,31 +112,43 @@ async function showPath() {
         await wait(50);
     }
 }
-
+var cost;
+function fill() {
+    cost = [];
+    for (let i = 0; i < 30 * 80; i++) {
+        cost.push(20 * 30 * 80);
+    }
+}
 async function Dijkstra(startId, targetId) {
+    fill();
     pervNode = [];
-    if(startId == undefined)
+    if (startId == undefined)
         return;
+    startId = parseInt(startId);
     let q = new PriorityQueue();
     q.push([0, startId]);
-    pervNode[startId, -1];
+    cost[parseInt(startId)] = 0;
+    pervNode[startId] = -1;
     while (!q.isEmpty()) {
         let current = q.dequeue();
-        let currentTile = board.tileOf(current[1]);
-        currentTile.visit();
-        await wait(10);
-        if (current[1] == targetId) {
+        let u = current[1];
+        if (u == targetId) {
             return;
         }
         for (let direction of DIRECTIONS) {
             let childId = moveId(current[1], direction);
             if (childId == undefined)
                 continue;
+            let v = parseInt(childId);
             let childTile = board.tileOf(childId);
-            if(childTile.available()){
-                q.push([current[0] + childTile.value, childId]);
-                childTile.visit();
-                pervNode[childId] = current[1];
+            if(childTile.type == 'block'){
+                continue;
+            }
+            let w = childTile.value;
+            if (cost[v] > cost[u] + w) {
+                cost[v] = cost[u] + w;
+                q.push([cost[v], v]);
+                pervNode[v] = u;
             }
         }
     }

@@ -32,10 +32,6 @@ class Tile {
         return (this.type != 'block' && !this.visited);
     }
 
-    isTarget() {
-        return this.type == 'target';
-    }
-
 }
 
 
