@@ -15,7 +15,8 @@ for now it only contains
 [Visit website](https://affectionate-thompson-376ec3.netlify.app/)
 
 ## Screenshots
-
+![Sorting Algorithms](https://github.com/4hab/algorithms-simulator/blob/master/algo-simulator.png)
+![Shortest path Algorithms](https://github.com/4hab/algorithms-simulator/blob/master/bfs.png)
 
 ## ToDo
 Currently I am working on some other algorithms and data structures to add
