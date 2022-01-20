@@ -15,6 +15,11 @@ nav h1{
     text-align: center;
 }
 
+label span{
+    text-decoration: underline;
+    font-weight: bold;
+}
+
 .tile{
     border-right: 1px solid var(--lightGray);
     border-bottom: 1px solid var(--lightGray);
