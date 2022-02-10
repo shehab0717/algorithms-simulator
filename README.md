@@ -12,7 +12,7 @@ for now it only contains
 	 1. BFS
 	 2. Dijkstra
 
-[Visit website](https://affectionate-thompson-376ec3.netlify.app/)
+[Visit website](https://algo-simulator.netlify.app/)
 
 ## Screenshots
 ![Sorting Algorithms](https://github.com/4hab/algorithms-simulator/blob/master/algo-simulator.png)
