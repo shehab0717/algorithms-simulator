@@ -35,11 +35,13 @@ goBtn.onclick = async function () {
 };
 
 function wait(time) {
-    return new Promise(resolve => {
-        setTimeout(() => {
-            resolve();
+    return new Promise((resolve, reject) => {
+        let id = setTimeout(function () {
+            resolve(id);
         }, time);
-    })
+        // resolve(id);
+
+    });
 }
 
 function rowNumber(idString) {
@@ -83,7 +85,7 @@ async function bfs(startId, targetId) {
         if (currentId == targetId) {
             return;
         }
-        await wait(10);
+        await wait(10).then(id => clearTimeout(id));
         for (let direction of DIRECTIONS) {
             let childId = moveId(currentId, direction);
             if (childId == undefined)
@@ -109,7 +111,7 @@ async function showPath() {
     for (let i = path.length - 1; i >= 0; i--) {
         let tile = board.tileOf(path[i]);
         tile.setType('path');
-        await wait(50);
+        await wait(50).then(id=>clearTimeout(id));
     }
 }
 var cost;
@@ -141,7 +143,7 @@ async function Dijkstra(startId, targetId) {
                 continue;
             let v = parseInt(childId);
             let childTile = board.tileOf(childId);
-            if(childTile.type == 'block'){
+            if (childTile.type == 'block') {
                 continue;
             }
             let w = childTile.value;
