@@ -27,5 +27,5 @@ Currently I am working on some other algorithms and data structures to add
 
 **Data structures**
  - Binary tree 
- - 	Trie 	
+ - Trie 	
  - Suffix tree
