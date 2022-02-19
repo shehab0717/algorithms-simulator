@@ -34,9 +34,10 @@ goBtn.onclick = async function () {
     await showPath();
 };
 
-function wait(time) {
+function wait(time, task) {
     return new Promise((resolve, reject) => {
         let id = setTimeout(function () {
+            task();
             resolve(id);
         }, time);
         // resolve(id);
@@ -85,19 +86,21 @@ async function bfs(startId, targetId) {
         if (currentId == targetId) {
             return;
         }
-        await wait(10).then(id => clearTimeout(id));
-        for (let direction of DIRECTIONS) {
-            let childId = moveId(currentId, direction);
-            if (childId == undefined)
-                continue;
-            childId = parseInt(childId);
-            let child = board.tileOf(childId);
-            if (child.available()) {
-                child.visit(true);
-                queue.push(childId);
-                pervNode[childId] = currentId;
+        const loop = () => {
+            for (let direction of DIRECTIONS) {
+                let childId = moveId(currentId, direction);
+                if (childId == undefined)
+                    continue;
+                childId = parseInt(childId);
+                let child = board.tileOf(childId);
+                if (child.available()) {
+                    child.visit(true);
+                    queue.push(childId);
+                    pervNode[childId] = currentId;
+                }
             }
         }
+        await wait(10, loop).then(id => clearTimeout(id));
     }
 }
 
@@ -111,7 +114,7 @@ async function showPath() {
     for (let i = path.length - 1; i >= 0; i--) {
         let tile = board.tileOf(path[i]);
         tile.setType('path');
-        await wait(50).then(id=>clearTimeout(id));
+        await wait(50,function(){}).then(id => clearTimeout(id));
     }
 }
 var cost;
